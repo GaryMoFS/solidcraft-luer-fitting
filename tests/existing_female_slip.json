@@ -1,0 +1,18 @@
+{
+  "entry": "luer-fitting",
+  "description": "female_slip placed free in a design that already has two boxes: the boxes stay untouched",
+  "design": "two_boxes.sc",
+  "params": {
+    "fitting_type": "female_slip",
+    "clearance": 0.0
+  },
+  "expect": {
+    "model": {
+      "body_count": 3,
+      "total": {
+        "volume_mm3": 9768.44
+      }
+    },
+    "tolerance": 0.0002
+  }
+}

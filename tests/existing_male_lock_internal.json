@@ -1,0 +1,19 @@
+{
+  "entry": "luer-fitting",
+  "description": "male_lock_internal placed free in a design that already has two boxes: the boxes stay untouched",
+  "design": "two_boxes.sc",
+  "params": {
+    "fitting_type": "male_lock_internal",
+    "clearance": 0.0,
+    "hole_diameter": 2.25
+  },
+  "expect": {
+    "model": {
+      "body_count": 3,
+      "total": {
+        "volume_mm3": 10025.422
+      }
+    },
+    "tolerance": 0.0002
+  }
+}

@@ -137,20 +137,38 @@ fn revolve_sketch(
         args.insert("body_name".to_string(), json!(b));
     }
     let res = run_cmd("solid.revolve", Value::Object(args))?;
-    let out_body = res
-        .get("body")
-        .and_then(Value::as_str)
-        .or_else(|| {
-            res.get("bodies")
-                .and_then(Value::as_array)
-                .and_then(|a| a.first())
-                .and_then(Value::as_str)
-        })
-        .or(targets)
+    Ok(revolved_body_name(&res, targets, body_name))
+}
+
+/// The body a revolve produced or changed.
+///
+/// `solid.revolve` replies with `bodies` (every body in the design), plus `created_bodies` and
+/// `changed_bodies` for this feature alone. Never read the first entry of `bodies`: in a design
+/// that already has a body it names that unrelated body, and the thread and pocket steps that
+/// follow would then cut or join the wrong part.
+fn revolved_body_name(res: &Value, targets: Option<&str>, body_name: Option<&str>) -> String {
+    let names = |key: &str| -> alloc::vec::Vec<&str> {
+        res.get(key)
+            .and_then(Value::as_array)
+            .map(|a| a.iter().filter_map(Value::as_str).collect())
+            .unwrap_or_default()
+    };
+    if let Some(target) = targets {
+        // Join or cut: the target keeps its name; fall back to what the feature says it changed.
+        let changed = names("changed_bodies");
+        if changed.is_empty() || changed.contains(&target) {
+            return target.to_string();
+        }
+        return changed[0].to_string();
+    }
+    // New body: the feature's own created body, then the name we asked for.
+    names("created_bodies")
+        .first()
+        .copied()
+        .or_else(|| res.get("body").and_then(Value::as_str))
         .or(body_name)
         .unwrap_or("Body")
-        .to_string();
-    Ok(out_body)
+        .to_string()
 }
 
 fn apply_double_start_thread(

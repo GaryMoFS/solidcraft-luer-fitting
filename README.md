@@ -38,3 +38,27 @@ Copy-Item "C:\Users\garym\Documents\solidcraft-luer-fitting\dist\solidcraft-luer
 ```powershell
 & "C:\Users\garym\Documents\SolidCraft-r48-trial\target\ci\solidcraft-cli.exe" plugin check "$env:LOCALAPPDATA\SolidCraft\plugins\solidcraft-luer-fitting"
 ```
+
+## Tests
+
+`tests\` holds 18 geometry cases for `solidcraft-cli plugin test`. Each of the 6 fitting types runs three ways, and every case checks the body count and the total volume:
+
+- alone in an empty design (`<type>.json`);
+- placed free in a design that already has two boxes, `tests\two_boxes.sc` (`existing_<type>.json`): the boxes must stay untouched;
+- on the top face of the second box (`face_<type>.json`): only that box is joined or cut.
+
+`plugin test` wants the built plugin and the `tests\` folder side by side, so copy both into a scratch folder:
+
+```powershell
+$t = Join-Path $env:TEMP "solidcraft-luer-fitting"
+Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Force -Path $t | Out-Null
+Copy-Item "C:\Users\garym\Documents\solidcraft-luer-fitting\dist\solidcraft-luer-fitting\*" $t -Force
+Copy-Item "C:\Users\garym\Documents\solidcraft-luer-fitting\tests" $t -Recurse -Force
+& "C:\Users\garym\Documents\SolidCraft-r48-trial\target\ci\solidcraft-cli.exe" plugin test $t --json
+```
+
+## Changes
+
+- **0.1.1**: a fitting built in a design that already had another body cut its thread and pocket into the wrong body (the first one in the design) and left the new fitting plain. The plugin now uses the body the revolve itself reports. Added the `tests\` cases above.
+- **0.1.0**: first release.

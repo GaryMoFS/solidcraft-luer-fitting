@@ -1,0 +1,29 @@
+{
+  "entry": "luer-fitting",
+  "description": "female_slip on the top face of BoxB (the second body): joins or cuts BoxB only",
+  "design": "two_boxes.sc",
+  "params": {
+    "fitting_type": "female_slip",
+    "clearance": 0.0,
+    "plane": [
+      {
+        "type": "face",
+        "body": "BoxB",
+        "point": [
+          40,
+          0,
+          12
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "model": {
+      "body_count": 2,
+      "total": {
+        "volume_mm3": 9768.44
+      }
+    },
+    "tolerance": 0.0002
+  }
+}

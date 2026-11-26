@@ -1,0 +1,18 @@
+{
+  "entry": "luer-fitting",
+  "description": "male_lock alone in an empty design",
+  "params": {
+    "fitting_type": "male_lock",
+    "clearance": 0.0,
+    "hole_diameter": 2.25
+  },
+  "expect": {
+    "model": {
+      "body_count": 1,
+      "total": {
+        "volume_mm3": 343.531
+      }
+    },
+    "tolerance": 0.0002
+  }
+}

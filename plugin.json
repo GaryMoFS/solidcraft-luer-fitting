@@ -1,7 +1,7 @@
 {
   "id": "solidcraft-luer-fitting",
   "name": "Luer Fitting",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Creates ISO 80369-7 (Sub-standard 7) male and female Luer slip and Luer lock fittings with adjustable hole diameter and diametral clearance.",
   "capabilities": ["commands@0.2", "dialog@0.1"],
   "runtime": {
