@@ -1,0 +1,112 @@
+{
+  "id": "solidcraft-luer-fitting",
+  "name": "Luer Fitting",
+  "version": "0.1.0",
+  "description": "Creates ISO 80369-7 (Sub-standard 7) male and female Luer slip and Luer lock fittings with adjustable hole diameter and diametral clearance.",
+  "capabilities": ["commands@0.2", "dialog@0.1"],
+  "runtime": {
+    "module": "solidcraft-luer-fitting.wasm",
+    "commands": [
+      "document.inspect",
+      "selection.get",
+      "inspect.measure",
+      "model.faces",
+      "model.edges",
+      "sketch.inspect",
+      "sketch.create",
+      "sketch.line",
+      "sketch.finish",
+      "solid.revolve",
+      "solid.coil",
+      "solid.combine"
+    ],
+    "limits": {
+      "fuel": 100000000,
+      "memory_mib": 32,
+      "deadline_ms": 30000
+    },
+    "entries": [
+      {
+        "name": "luer-fitting",
+        "effect": "edit",
+        "dialog_hook": true,
+        "slots": [
+          { "kind": "menu", "name": "Luer Fitting..." },
+          { "kind": "ribbon", "name": "Luer Fitting" }
+        ],
+        "input_schema": {
+          "type": "object",
+          "required": ["fitting_type", "clearance"],
+          "x-solidcraft-order": [
+            "point",
+            "plane",
+            "fitting_type",
+            "hole_diameter",
+            "clearance",
+            "flip_direction"
+          ],
+          "properties": {
+            "point": {
+              "type": "array",
+              "title": "Point",
+              "description": "Select a circular edge (uses its center) or a sketch point to locate the fitting. Leave empty to center on the selected plane/face.",
+              "maxItems": 1,
+              "items": { "type": "object" },
+              "x-solidcraft-selection": { "version": 1, "accept": ["edge", "sketch_point"] }
+            },
+            "plane": {
+              "type": "array",
+              "title": "Plane",
+              "description": "Select a planar face or construction plane to orient the fitting. Leave empty to use the XY plane.",
+              "maxItems": 1,
+              "items": { "type": "object" },
+              "x-solidcraft-selection": { "version": 1, "accept": ["face", "plane"] }
+            },
+            "fitting_type": {
+              "type": "string",
+              "title": "Type",
+              "description": "Slip: friction-fit 6% taper. Lock: double-start trapezoidal locking thread. Internal variants sink the fitting into an existing solid.",
+              "oneOf": [
+                { "const": "male_slip", "title": "Male Slip" },
+                { "const": "male_lock", "title": "Male Lock" },
+                { "const": "male_lock_internal", "title": "Male Lock (internal)" },
+                { "const": "female_slip", "title": "Female Slip" },
+                { "const": "female_slip_internal", "title": "Female Slip (internal)" },
+                { "const": "female_lock", "title": "Female Lock" }
+              ],
+              "default": "male_lock"
+            },
+            "hole_diameter": {
+              "type": "number",
+              "title": "Hole diameter",
+              "description": "Central fluid bore diameter through the male Luer cone.",
+              "unit": "mm",
+              "minimum": 0.2,
+              "maximum": 3.4,
+              "default": 2.25,
+              "x-solidcraft-visible-when": {
+                "field": "fitting_type",
+                "in": ["male_slip", "male_lock", "male_lock_internal"]
+              }
+            },
+            "clearance": {
+              "type": "number",
+              "title": "Clearance",
+              "description": "Diametral clearance applied to the 6% taper cone and thread engagement (+ looser, - tighter for 3D printing tolerances).",
+              "unit": "mm",
+              "minimum": -0.5,
+              "maximum": 0.5,
+              "default": 0.0
+            },
+            "flip_direction": {
+              "type": "boolean",
+              "title": "Flip direction",
+              "description": "Invert the fitting orientation along the plane normal.",
+              "default": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

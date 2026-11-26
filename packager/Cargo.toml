@@ -1,0 +1,16 @@
+[package]
+name = "solidcraft-luer-fitting-packager"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+wit-component = "0.244"
+wit-parser = "0.244"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+craft-plugin = { path = "../../SolidCraft-r49-trial/crates/craft-plugin" }
+craft-plugin-wasm = { path = "../../SolidCraft-r49-trial/crates/craft-plugin-wasm" }
+serde_json = "1"
+solidcraft-engine = { path = "../../SolidCraft-r49-trial/crates/engine" }

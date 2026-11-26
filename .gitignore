@@ -1,0 +1,4 @@
+/dist/
+/plugin/target/
+/packager/target/
+*.bak
